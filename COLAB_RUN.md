@@ -23,6 +23,17 @@ render only. The notebook is `notebook/chicken_blender_colab.ipynb`.
 
 ## The mandatory stop: Eevee test frames
 
+**EGL fix (proven 2026-11-12, now baked into the install cell):** Colab
+ships the NVIDIA EGL library (`/usr/lib64-nvidia/libEGL_nvidia.so.0`) but
+no vendor file for it, so Blender's EGL context fails (`EGL_BAD_MATCH`)
+and Eevee silently falls back to CPU rendering at ~5 min/frame. The
+install cell now writes `/usr/share/glvnd/egl_vendor.d/10_nvidia.json`
+before any render; with it, Eevee uses the T4 at ~3.5 s/frame (measured
+2026-11-12: 13 test frames in 45 s). The vendor file lives only in the
+live session — after a session drop, re-running the install cell
+re-creates it. If a render ever runs at minutes-per-frame, the vendor
+file is missing: stop, re-run the install cell, re-run the render.
+
 Eevee was never validated locally (no GPU there). The test-frames cell
 renders 13 frames, one per shot, and displays them inline. Check every one:
 
