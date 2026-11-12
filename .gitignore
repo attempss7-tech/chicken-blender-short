@@ -1,0 +1,9 @@
+# Local Blender install — the Colab notebook downloads its own copy.
+tools/
+# Generated build outputs (kept locally, not in the repo).
+scenes/*.blend
+scenes/*.blend1
+out/
+final/
+__pycache__/
+*.pyc
